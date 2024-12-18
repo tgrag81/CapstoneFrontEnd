@@ -9,13 +9,13 @@ export const ApiProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        const newSocket = io("http://localhost:5000");
+        const newSocket = io("http://localhost:5173");
         setSocket(newSocket);
         return () => newSocket.close();
     }, []);
 
     const api = axios.create({
-        baseURL: "http://localhost:5000/api",
+        baseURL: "http://localhost:5173/api",
     });
 
     return (

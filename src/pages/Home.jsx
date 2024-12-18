@@ -4,7 +4,6 @@ import { useApi } from "../context/ApiContext.jsx";
 import { motion } from "framer-motion";
 import axios from "axios";
 
-
 const Home = () => {
     const { api, socket } = useApi();
     const [posts, setPosts] = useState([]);
@@ -22,27 +21,39 @@ const Home = () => {
     }, [socket])
 
     useEffect(() => {
-        axios.get('http://localhost:5000/api/posts', {withCredentials: true}).then(() => {
+      //  axios.get('http://localhost:5173/api/posts', {withCredentials: true}).then(() => {
+        //const fetchPosts = async () => {
+          //  const res = await api.get("/posts");
+            //setPosts(res.data);
+        //} THIS WAS REMOVED DURING HELP QUEUE 
+                //fetchPosts();
         const fetchPosts = async () => {
-            const res = await api.get("/posts");
-            setPosts(res.data);
-        }
-        fetchPosts();
-    }, [api])},
+            const response = await axios({
+                url: "http://localhost:5001/api/posts",
+                method: "GET"
+            });
 
+            const data = await response.data;
+
+            setPosts(data);
+        }
+
+        fetchPosts();
+    }, [api])
+
+    console.log(posts);
     
-    )
-    postVariant = {
+    const postVariant = {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 },
     }
 
-,
-     (
+
+return (
         <div>
           <h1>Post Feed</h1>
-            {posts.map((post) => (
-                <motion.div
+            {posts?.map((post) => {
+              return (  <motion.div
                     key={post._id}
                     variants={postVariant}
                     initial="hidden"
@@ -58,8 +69,8 @@ const Home = () => {
                             <li key={comment._id}>{comment.text}</li>
                         ))}
                     </ul>
-                </motion.div>
-            ))} 
+                </motion.div>)
+            })} 
         </div>
      )   
 }
